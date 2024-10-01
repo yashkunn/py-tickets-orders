@@ -14,6 +14,7 @@ class ActorApiTests(TestCase):
 
     def test_get_actors(self):
         response = self.client.get("/api/cinema/actors/")
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         actors_full_names = [actor["full_name"] for actor in response.data]
         self.assertEqual(

@@ -112,6 +112,7 @@ class TicketSerializer(serializers.ModelSerializer):
                 "This seat is already taken"
             ),
         )
+        return attr
 
 
 class TicketListSerializer(TicketSerializer):

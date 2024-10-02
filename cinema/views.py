@@ -100,6 +100,8 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
                 * F("cinema_hall__seats_in_row")
                 - Count("tickets")
             )
+        if self.action == "retrieve":
+            queryset = queryset.select_related("movie", "cinema_hall")
 
         return queryset
 

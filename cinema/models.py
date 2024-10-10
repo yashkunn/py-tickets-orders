@@ -31,7 +31,7 @@ class Actor(models.Model):
         return self.first_name + " " + self.last_name
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
 
@@ -90,7 +90,7 @@ class Ticket(models.Model):
             row: int,
             movie_session: MovieSession,
             error_to_raise
-    ):
+    ) -> None:
         for ticket_atr_value, ticket_attr_name, cinema_hall_attr_name in [
             (seat, "seat", "seats_in_row"),
             (row, "row", "rows")

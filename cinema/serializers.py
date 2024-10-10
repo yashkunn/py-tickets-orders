@@ -83,11 +83,11 @@ class MovieSessionListSerializer(MovieSessionSerializer):
 
 
 class MovieSessionDetailSerializer(MovieSessionSerializer):
-    movie = MovieListSerializer(many=False, read_only=True)
-    cinema_hall = CinemaHallSerializer(many=False, read_only=True)
+    movie = MovieListSerializer(read_only=True)
+    cinema_hall = CinemaHallSerializer(read_only=True)
     taken_places = serializers.SerializerMethodField()
 
-    def get_taken_places(self, movie_session):
+    def get_taken_places(self, movie_session: MovieSession) -> list:
         return [
             {"row": ticket.row, "seat": ticket.seat}
             for ticket in movie_session.tickets.all()
@@ -103,7 +103,7 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = ("id", "row", "seat", "movie_session")
 
-    def validate(self, attr):
+    def validate(self, attr: dict) -> dict:
         Ticket.validate_seats(
             attr["seat"],
             attr["row"],
@@ -132,7 +132,6 @@ class OrderSerializer(serializers.ModelSerializer):
             order = Order.objects.create(**validated_data)
             for ticket_data in tickets_data:
                 Ticket.objects.create(order=order, **ticket_data)
-            return order
 
 
 class OrderListSerializer(OrderSerializer):

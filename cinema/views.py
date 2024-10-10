@@ -14,7 +14,9 @@ from cinema.serializers import (
     MovieSessionListSerializer,
     MovieDetailSerializer,
     MovieSessionDetailSerializer,
-    MovieListSerializer, OrderSerializer, OrderListSerializer,
+    MovieListSerializer,
+    OrderSerializer,
+    OrderListSerializer,
 )
 
 
@@ -47,7 +49,7 @@ class MovieViewSet(viewsets.ModelViewSet):
         return MovieSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
 
         if self.action == "list":
             queryset = self.queryset.prefetch_related("actors", "genres")
@@ -57,16 +59,16 @@ class MovieViewSet(viewsets.ModelViewSet):
             title = self.request.query_params.get("title")
             if genres:
                 genres = filter_request_to_int(genres)
-                queryset = queryset.filter(genres__id__in=genres).distinct()
+                queryset = queryset.filter(genres__id__in=genres)
 
             if actors:
                 actors = filter_request_to_int(actors)
-                queryset = queryset.filter(actors__id__in=actors).distinct()
+                queryset = queryset.filter(actors__id__in=actors)
 
             if title:
                 queryset = queryset.filter(title__icontains=title)
 
-        return queryset
+        return queryset.distinct()
 
 
 class MovieSessionViewSet(viewsets.ModelViewSet):
@@ -83,7 +85,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
         return MovieSessionSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
         if self.action == "list":
             queryset = queryset.select_related()
             movie = self.request.query_params.get("movie")

@@ -97,14 +97,15 @@ class Ticket(models.Model):
         ]:
             count_attrs = getattr(
                 movie_session.cinema_hall,
-                cinema_hall_attr_name)
+                cinema_hall_attr_name
+            )
             if not (1 <= ticket_atr_value <= count_attrs):
                 raise error_to_raise(
                     {
                         ticket_attr_name:
-                            f"{ticket_attr_name} number must be "
-                            f"in available range: "
-                            f"(1, {cinema_hall_attr_name}): (1, {count_attrs})"
+                        f"{ticket_attr_name} number must be "
+                        f"in available range: "
+                        f"(1, {cinema_hall_attr_name}): (1, {count_attrs})"
                     }
 
                 )
@@ -118,14 +119,14 @@ class Ticket(models.Model):
         )
 
     def save(
-            self,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
     ):
         self.full_clean()
-        super(Ticket, self).save(
+        return super(Ticket, self).save(
             force_insert, force_update, using, update_fields
         )
 
